@@ -6,6 +6,12 @@
 /build
 /tests/cache
 
+# composer.lock
+composer.lock
+
+# phpunit
+phpunit.xml
+
 # IDEs and editors
 /.idea
 .project
