@@ -14,6 +14,8 @@ services:
     volumes:
       - .:/korowai
     working_dir: /korowai
+    environment:
+      APACHE_DOCUMENT_ROOT: "/korowai/public"
 
   ldap-service:
     command: [ --copy-service, --loglevel, debug]
