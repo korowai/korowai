@@ -41,3 +41,6 @@ phpunit.xml
 Homestead.json
 Homestead.yaml
 yarn-error.log
+
+# Config
+/.env
