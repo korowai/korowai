@@ -11,6 +11,14 @@
 |
 */
 
+$ldap_middleware = [];
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
+});
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+  $router->post('ldap/bind', [
+    'uses' => 'Ldap\LdapController@bind'
+  ]);
 });
