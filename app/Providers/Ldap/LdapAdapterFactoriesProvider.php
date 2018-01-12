@@ -4,6 +4,7 @@ namespace App\Providers\Ldap;
 
 use Illuminate\Support\ServiceProvider;
 use Korowai\Component\Ldap\Adapter\ExtLdap\AdapterFactory;
+use App\Korowai\LdapAdapterFactories;
 
 class LdapAdapterFactoriesProvider extends ServiceProvider
 {
@@ -29,12 +30,11 @@ class LdapAdapterFactoriesProvider extends ServiceProvider
      */
     public function register()
     {
-      $this->app->singleton(array, function($app) {
-        $configs = config('ldap');
-        $factories = array();
+      $this->app->singleton(LdapAdapterFactories::class, function($app) {
+        $servers = config('ldap.servers');
+        $factories = new LdapAdapterFactories();
         // TODO: error handling (array_walk returns FALSE on failure)
-        array_walk($configs, function($array, $key) use (&$factories) {
-          $config = $array[$key];
+        array_walk($servers, function(&$config, $key) use (&$factories) {
           if(isset($config['factory'])) {
             $factoryClass = $config['factory'];
             unset($config['factory']);
@@ -56,6 +56,6 @@ class LdapAdapterFactoriesProvider extends ServiceProvider
      */
     public function provides()
     {
-      return [array];
+      return [LdapAdapterFactories];
     }
 }

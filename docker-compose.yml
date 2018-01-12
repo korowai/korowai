@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 services:
   php-cli:
     image: korowai/php:cli
@@ -12,7 +12,13 @@ services:
   http-service:
     image: korowai/php:apache
     volumes:
-      - .:/korowai
+      - type: bind
+        source: .
+        target: /korowai
+      - type: volume
+        source: http-logs
+        target: /korowai/storage/logs
+
     working_dir: /korowai
     environment:
       APACHE_DOCUMENT_ROOT: "/korowai/public"
@@ -21,4 +27,11 @@ services:
     command: [ --copy-service, --loglevel, debug]
     image: korowai/openldap
     volumes:
-      - .vendor/korowai/framework/src/Korowai/Component/Ldap/Resources/ldif/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+      - ./vendor/korowai/framework/src/Korowai/Component/Ldap/Resources/ldif/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+
+volumes:
+  http-logs:
+      driver_opts:
+        type: tmpfs
+        device: tmpfs
+        o: "size=100m,uid=33,gid=33"

@@ -19,6 +19,6 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api'], function () use ($router) {
   $router->post('ldap/bind', [
-    'uses' => 'Ldap\LdapController@bind'
+    'uses' => 'Ldap\AuthController@bind'
   ]);
 });
