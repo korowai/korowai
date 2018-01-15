@@ -11,6 +11,14 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+
+$api = $app->make(Dingo\Api\Routing\Router::class);
+
+$api->version(['v1'], [
+  'namespace' => 'Korowai\\Framework\\Http\\Api\\Controllers'
+], function ($api) {
+  $api->get('config/database/{id}', [
+    'as' => 'get_database_config',
+    'uses' => 'DatabaseConfigController@get'
+  ]);
 });

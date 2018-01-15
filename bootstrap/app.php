@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-// $app->withFacades();
+$app->withFacades();
 
 // $app->withEloquent();
 
@@ -82,7 +82,10 @@ $app->singleton(
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
-$app->register(App\Providers\Ldap\LdapAdapterFactoriesProvider::class);
+// Dingo Lumen service provider ...
+$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
+
+// Korowai providers ...
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +104,12 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
+require __DIR__.'/../routes/api.php';
+
 $app->configure('ldap');
+
+// FIXME: move to a more appropriate place
+// Register Dingo Transformers
+$app['Dingo\Api\Transformer\Factory']->register('Korowai\Framework\Model\DatabaseConfig', 'Korowai\Framework\Http\Api\Transformers\DatabaseConfigTransformer');
 
 return $app;
