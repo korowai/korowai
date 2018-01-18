@@ -14,24 +14,23 @@
 
 $api = $app->make(Dingo\Api\Routing\Router::class);
 
-$api->version(['v1'], function ($api) {
-  // Routes provided by application
-  $api->group([
+// Routes provided by application
+$api->version(['v1'], [
     'namespace' => 'App\Http\Api\Controllers'
-  ], function($api) {
+  ], function ($api) {
     $api->get('example', [
       'as' => 'get.example',
       'uses' => 'ExampleController@get'
     ]);
-  });
+});
 
-  // Routes provided by korowai framework
-  $api->group([
-    'namespace' => 'Korowai\\Framework\\Http\\Api\\Controllers'
+// Routes provided by korowai framework (they actually should be provided by
+// the framework).
+$api->version(['v1'], [
+    'namespace' => 'Korowai\Framework\Http\Api\Controllers'
   ], function ($api) {
     $api->get('config/database/{id}', [
       'as' => 'get.database.config',
       'uses' => 'DatabaseConfigController@get'
     ]);
-  });
 });

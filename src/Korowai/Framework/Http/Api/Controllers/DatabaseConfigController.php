@@ -25,18 +25,10 @@ class DatabaseConfigController extends Controller
 
     public function get(Request $request, int $id)
     {
-        $databases = config('ldap.databases');
-        $array = $databases[$id-1];
-        $db = new DatabaseConfig();
-        $db->id = $array['id'];
-        $db->name = $array['name'];
-        $keys = ['desc', 'base', 'host', 'port', 'uri', 'encryption', 'options'];
-        foreach($keys as $key) {
-            if(isset($array[$key])) {
-                $db->$key = $array[$key];
-            }
-        }
-        return $this->response->array($db);
+        $databases = DatabaseConfig::findById($id);
+        throw new \RuntimeException("hehe: " . var_export($databases, true));
+        // FIXME: ensure, it's unique
+        return $this->response->array($databases[0]);
     }
 }
 // vim: syntax=php sw=4 ts=4 et:

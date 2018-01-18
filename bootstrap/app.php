@@ -82,10 +82,11 @@ $app->singleton(
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
+// Korowai providers ...
+$app->register(Korowai\Framework\Http\Api\Providers\FractalServiceProvider::class);
+
 // Dingo Lumen service provider ...
 $app->register(Dingo\Api\Provider\LumenServiceProvider::class);
-
-// Korowai providers ...
 
 /*
 |--------------------------------------------------------------------------

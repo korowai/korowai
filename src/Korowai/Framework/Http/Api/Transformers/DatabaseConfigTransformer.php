@@ -22,16 +22,7 @@ class DatabaseConfigTransformer extends TransformerAbstract
 {
     public function transform(DatabaseConfig $db)
     {
-        $keys = [
-            'id', 'name', 'desc', 'base', 'binddn', 'host', 'port',
-            'uri', 'encryption', 'options'
-        ];
-        $existing = array_filter($keys, function($key) use ($db) {
-            return isset($db->$key);
-        });
-        $array = array();
-        foreach($existing as $key) { $array[$key] = $db->$key; }
-        return $array;
+        return $db->toArray();
     }
 }
 // vim: syntax=php sw=4 ts=4 et:
