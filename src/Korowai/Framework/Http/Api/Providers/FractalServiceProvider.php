@@ -14,6 +14,7 @@ use Illuminate\Support\ServiceProvider;
 
 class FractalServiceProvider extends ServiceProvider
 {
+
     /**
      * Bootstrap the application services.
      *
@@ -34,7 +35,9 @@ class FractalServiceProvider extends ServiceProvider
         $this->app->bind('\League\Fractal\Manager', function($app) {
             $fractal = new \League\Fractal\Manager;
 
-            $serializer = new \League\Fractal\Serializer\JsonApiSerializer();
+            // FIXME: elaborate how to provide base URL to JsonApiSerializer
+            // FIXME: seems like it's too early to use request, router, etc.
+            $serializer = new \League\Fractal\Serializer\JsonApiSerializer('');
 
             $fractal->setSerializer($serializer);
 

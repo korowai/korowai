@@ -109,8 +109,4 @@ require __DIR__.'/../routes/api.php';
 
 $app->configure('ldap');
 
-// FIXME: move to a more appropriate place
-// Register Dingo Transformers
-$app['Dingo\Api\Transformer\Factory']->register('Korowai\Framework\Model\DatabaseConfig', 'Korowai\Framework\Http\Api\Transformers\DatabaseConfigTransformer');
-
 return $app;

@@ -13,6 +13,7 @@ namespace Korowai\Framework\Http\Api\Controllers;
 use Illuminate\Http\Request;
 use Korowai\Framework\Http\Api\Controllers\Controller;
 use Korowai\Framework\Model\DatabaseConfig;
+use Korowai\Framework\Http\Api\Transformers\DatabaseConfigTransformer;
 
 /**
  * @todo Write documentation for DatabaseController
@@ -23,12 +24,12 @@ class DatabaseConfigController extends Controller
     {
     }
 
-    public function get(Request $request, int $id)
+    public function getConfigById(Request $request, int $id)
     {
+        // FIXME: ensure somehow a consistency of $key with an appropriate route
+        $key = 'config/database';
         $databases = DatabaseConfig::findById($id);
-        throw new \RuntimeException("hehe: " . var_export($databases, true));
-        // FIXME: ensure, it's unique
-        return $this->response->array($databases[0]);
+        return $this->response->item($databases[0], new DatabaseConfigTransformer, ['key' => $key]);
     }
 }
 // vim: syntax=php sw=4 ts=4 et:

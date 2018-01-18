@@ -12,15 +12,36 @@ namespace Korowai\Framework\Model;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @todo Write documenation for DatabaseConfig
+ */
 class DatabaseConfig implements Arrayable
 {
     const DEFAULT_CONFIG = 'ldap.databases';
     const DEFAULT_OPTION_KEYS = array(
-        'id', 'name', 'desc', 'base', 'binddn', 'host', 'port', 'uri',
-        'encryption', 'options'
+        'id',
+        'name',
+        'desc',
+        'base',
+        'binddn',
+        'host',
+        'port',
+        'uri',
+        'encryption',
+        'options'
+    );
+    const UI_OPTION_KEYS = array(
+        'id',
+        'name',
+        'desc',
+        'binddn',
     );
 
     private $id;
+    private $name;
+    private $desc;
+    private $base;
+    private $binddn;
     private $host;
     private $port;
     private $uri;
@@ -41,14 +62,13 @@ class DatabaseConfig implements Arrayable
     public function __construct(array $config)
     {
         $array = $this->parseConfig($config);
-        throw new \RuntimeException("hoho: " . var_export($array,true));
-        array_walk($array, function($key, $value) { $this->$key = $value; });
+        array_walk($array, function($value, $key) { $this->$key = $value; });
     }
 
     public function parseConfig(array $config) : array
     {
         $keys = array_filter(static::DEFAULT_OPTION_KEYS, function($key) use ($config) {
-            return in_array($key, $config, true);
+            return array_key_exists($key, $config);
         });
         $values = array_map(function ($key) use ($config) {
             return $config[$key];
@@ -65,6 +85,56 @@ class DatabaseConfig implements Arrayable
             return $this->$key;
         }, $keys);
         return array_combine($keys, $values);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getDesc()
+    {
+        return $this->desc;
+    }
+
+    public function getBase()
+    {
+        return $this->base;
+    }
+
+    public function getBindDn()
+    {
+        return $this->binddn;
+    }
+
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    public function getPort()
+    {
+        return $this->port;
+    }
+
+    public function getUri()
+    {
+        return $this->uri;
+    }
+
+    public function getEncryption()
+    {
+        return $this->encryption;
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
     }
 }
 // vim: syntax=php sw=4 ts=4 et:
