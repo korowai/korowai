@@ -8,13 +8,11 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Mappings;
+namespace Korowai\Framework\Http\Api\Serializers;
 
-interface HalMapping extends ApiMapping
+use League\Fractal\Serializer\JsonApiSerializer as FractalJsonApiSerializer;
+
+class JsonApiSerializer extends FractalJsonApiSerializer
 {
-    /**
-     * Returns an array of curies.
-     */
-    public function getCuries() : array;
 }
 // vim: syntax=php sw=4 ts=4 et:

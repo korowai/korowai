@@ -9,8 +9,7 @@
         "laravel/lumen-framework": "5.5.*",
         "korowai/framework": "dev-master",
         "vlucas/phpdotenv": "~2.2",
-        "dingo/api": "2.0.0-alpha1",
-        "nilportugues/hal": "^2.1"
+        "dingo/api": "2.0.0-alpha1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

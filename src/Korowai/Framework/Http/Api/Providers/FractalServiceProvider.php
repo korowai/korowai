@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Korowai\Framework\Http\Api\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Korowai\Framework\Http\Api\Serializers\JsonApiSerializer;
 
 class FractalServiceProvider extends ServiceProvider
 {
@@ -37,7 +38,8 @@ class FractalServiceProvider extends ServiceProvider
 
             // FIXME: elaborate how to provide base URL to JsonApiSerializer
             // FIXME: seems like it's too early to use request, router, etc.
-            $serializer = new \League\Fractal\Serializer\JsonApiSerializer('');
+            //$serializer = new \League\Fractal\Serializer\JsonApiSerializer('');
+            $serializer = new JsonApiSerializer('');
 
             $fractal->setSerializer($serializer);
 

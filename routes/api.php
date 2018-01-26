@@ -29,13 +29,14 @@ $api->version(['v1'], [
 $api->version(['v1'], [
     'namespace' => 'Korowai\Framework\Http\Api\Controllers'
   ], function ($api) {
-    // config
-    $api->group(['prefix' => 'config'], function($api) {
-      // database
-      $api->get('database/{id}', [
-        'as' => 'get.database.config',
-        'uses' => 'DatabaseConfigController@getConfigById'
-      ]);
-      // ---
-    });
+    // databases
+    $api->get('databases', [
+      'as' => 'get.databases',
+      'uses' => 'DatabaseConfigController@index'
+    ]);
+    $api->get('databases/{id}', [
+      'as' => 'get.database',
+      'uses' => 'DatabaseConfigController@show'
+    ]);
+    // ---
 });

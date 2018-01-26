@@ -48,6 +48,14 @@ class DatabaseConfig implements Arrayable
     private $encryption;
     private $options;
 
+    public static function all() : array
+    {
+        $databases = config(static::DEFAULT_CONFIG);
+        return array_map(function($db) {
+            return new DatabaseConfig($db);
+        }, $databases);
+    }
+
     public static function findById($id) : array
     {
         $databases = config(static::DEFAULT_CONFIG);

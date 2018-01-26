@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace Korowai\Framework\Http\Api\Transformers;
 
 use Korowai\Framework\Model\DatabaseConfig;
-use Korowai\Framework\Http\Api\Mappers\DatabaseConfigMapper;
 use League\Fractal\TransformerAbstract;
 
 class DatabaseConfigTransformer extends TransformerAbstract
