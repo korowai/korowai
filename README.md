@@ -1,7 +1,7 @@
 # korowai
 
-[![Build Status](https://travis-ci.org/ptomulik/korowai.svg?branch=master)](https://travis-ci.org/ptomulik/korowai)
-[![Coverage Status](https://coveralls.io/repos/github/ptomulik/korowai/badge.svg?branch=devel)](https://coveralls.io/github/ptomulik/korowai?branch=devel)
+[![Build Status](https://travis-ci.org/korowai/korowai.svg?branch=master)](https://travis-ci.org/korowai/korowai)
+[![Coverage Status](https://coveralls.io/repos/github/korowai/korowai/badge.svg?branch=devel)](https://coveralls.io/github/korowai/korowai?branch=devel)
 
 Open Source software for exploring LDAP directories.
 
