@@ -33,19 +33,37 @@ class FractalServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerFractalManager();
+        $this->registerFractalTransformer();
+    }
+
+    protected function registerFractalManager()
+    {
         $this->app->bind('\League\Fractal\Manager', function($app) {
             $fractal = new \League\Fractal\Manager;
 
             // FIXME: elaborate how to provide base URL to JsonApiSerializer
             // FIXME: seems like it's too early to use request, router, etc.
             //$serializer = new \League\Fractal\Serializer\JsonApiSerializer('');
-            $serializer = new JsonApiSerializer('');
+            $urlBase = '';
+            if((bool)($apiPrefix = config('api.prefix')) && ($apiPrefix != '/')) {
+                $urlBase = '/' . ltrim($apiPrefix, '/');
+            }
+            if((bool)($apiDomain = config('api.domain'))) {
+                // FIXME: HTTP vs. HTTPS?
+                $urlBase = 'http://' . $apiDomain . $urlBase;
+            }
+            $serializer = new JsonApiSerializer($urlBase);
 
             $fractal->setSerializer($serializer);
 
             return $fractal;
         });
 
+    }
+
+    protected function registerFractalTransformer()
+    {
         $this->app->bind('Dingo\Api\Transformer\Adapter\Fractal', function($app) {
             $fractal = $app->make('\League\Fractal\Manager');
 

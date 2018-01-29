@@ -29,14 +29,21 @@ $api->version(['v1'], [
 $api->version(['v1'], [
     'namespace' => 'Korowai\Framework\Http\Api\Controllers'
   ], function ($api) {
-    // databases
+    // -- databases
     $api->get('databases', [
-      'as' => 'get.databases',
+      'as' => 'databases.index',
       'uses' => 'DatabaseConfigController@index'
     ]);
     $api->get('databases/{id}', [
-      'as' => 'get.database',
+      'as' => 'databases.show',
       'uses' => 'DatabaseConfigController@show'
     ]);
-    // ---
+    // --- databases
+
+    // --- ldap entries
+    $api->get('entry/{server}/{dn}', [
+      'as' => 'entry.show',
+      'uses' => 'LdapEntryController@show'
+    ]);
+    // --- ldap entries
 });
