@@ -13,13 +13,13 @@ namespace Korowai\Framework\Http\Api\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Korowai\Framework\Http\Api\Controllers\Controller;
-use Korowai\Framework\Model\LdapEntry;
-use Korowai\Framework\Http\Api\Transformers\LdapEntryTransformer;
+use Korowai\Framework\Model\Entry;
+use Korowai\Framework\Http\Api\Transformers\EntryTransformer;
 
 /**
- * @todo Write documentation for LdapEntryController
+ * @todo Write documentation for EntryController
  */
-class LdapEntryController extends Controller
+class EntryController extends Controller
 {
     const RESOURCE_KEY = 'entry';
 
@@ -29,10 +29,10 @@ class LdapEntryController extends Controller
 //
 //    public function index(Request $request)
 //    {
-//        $databases = LdapEntry::all();
+//        $databases = Entry::all();
 //        return $this->response->collection(
 //            new Collection($databases),
-//            new LdapEntryTransformer,
+//            new EntryTransformer,
 //            ['key' => static::RESOURCE_KEY]
 //        );
 //    }
@@ -42,10 +42,10 @@ class LdapEntryController extends Controller
         $config = config('ldap.databases')[$server-1];
         $ldap = \Korowai\Component\Ldap\Ldap::createWithConfig(['host' => $config['host']]);
         $ldap->bind($config['binddn'], 'admin');
-        $entry = LdapEntry::findByDn($ldap, $dn);
+        $entry = Entry::findByDn($ldap, $dn);
         return $this->response->item(
             $entry,
-            new LdapEntryTransformer,
+            new EntryTransformer,
             ['key' => static::RESOURCE_KEY]
         );
     }

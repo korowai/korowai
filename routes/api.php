@@ -43,7 +43,7 @@ $api->version(['v1'], [
     // --- ldap entries
     $api->get('entry/{server}/{dn}', [
       'as' => 'entry.show',
-      'uses' => 'LdapEntryController@show'
+      'uses' => 'EntryController@show'
     ]);
     // --- ldap entries
 });

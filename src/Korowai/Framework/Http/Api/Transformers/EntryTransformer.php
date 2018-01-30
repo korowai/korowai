@@ -10,12 +10,12 @@ declare(strict_types=1);
 
 namespace Korowai\Framework\Http\Api\Transformers;
 
-use Korowai\Framework\Model\LdapEntry;
+use Korowai\Framework\Model\Entry;
 use League\Fractal\TransformerAbstract;
 
-class LdapEntryTransformer extends TransformerAbstract
+class EntryTransformer extends TransformerAbstract
 {
-    public function transform(LdapEntry $entry)
+    public function transform(Entry $entry)
     {
         return $entry->toArray();
     }
