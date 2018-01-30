@@ -82,8 +82,11 @@ $app->singleton(
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
+$app->configure('ldap');
+
 // Korowai providers ...
 $app->register(Korowai\Framework\Http\Api\Providers\FractalServiceProvider::class);
+$app->register(Korowai\Framework\Providers\LdapAdapterProvider::class);
 
 // Dingo Lumen service provider ...
 $app->register(Dingo\Api\Provider\LumenServiceProvider::class);
@@ -106,7 +109,5 @@ $app->router->group([
 });
 
 require __DIR__.'/../routes/api.php';
-
-$app->configure('ldap');
 
 return $app;

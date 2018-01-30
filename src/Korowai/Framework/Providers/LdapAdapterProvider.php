@@ -11,15 +11,21 @@ declare(strict_types=1);
 namespace Korowai\Framework\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Korowai\Component\Ldap\Adapter\AdapterFactoryInterface;
-
-class LdapAdapterFactories
-{
-    // TODO: implement
-};
+use Korowai\Component\Ldap\Ldap;
 
 class LdapAdapterProvider extends ServiceProvider
 {
+    const DEFAULT_CONFIG = 'ldap.databases';
+    const UI_OPTIONS = array(
+        'anonymous',
+        'base',
+        'binddn',
+        'bindpw',
+        'desc',
+        'factory',
+        'id',
+        'name',
+    );
 
     /**
      * Indicates if loading of the provider is deferred.
@@ -45,9 +51,27 @@ class LdapAdapterProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('ldap.factories', function ($app) {
-            return new LdapAdapterFactories;
-        });
+        $databases = config(static::DEFAULT_CONFIG);
+        foreach($databases as $db) {
+
+            $factory = array_key_exists('factory', $db) ? $db['factory'] : null;
+            $this->app->singleton("ldap.db." . $db['id'], function ($app) use ($db, $factory) {
+                $config = array_filter($db, function ($key) {
+                    return !in_array($key, static::UI_OPTIONS);
+                }, ARRAY_FILTER_USE_KEY);
+                $ldap = Ldap::createWithConfig($config, $factory);
+                if (array_key_exists('binddn', $db)) {
+                    if(array_key_exists('anonymous', $db) && $db['anonymous']) {
+                        $ldap->bind();
+                    } elseif(array_key_exists('bindpw', $db)) {
+                        $ldap->bind($db['binddn'], $db['bindpw']);
+                    } else {
+                        $ldap->bind($db['binddn']);
+                    }
+                }
+                return $ldap;
+            });
+        }
     }
 
     /**
@@ -57,7 +81,9 @@ class LdapAdapterProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['ldap.factories'];
+        return array_map(function ($db) {
+            return 'ldap.db.' . $db['id'];
+        }, config(static::DEFAULT_CONFIG));
     }
 }
 

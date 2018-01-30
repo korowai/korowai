@@ -25,7 +25,7 @@ class EntryId
      */
     private $serverId;
     /**
-     * @var string 
+     * @var string
      */
     private $dn;
 
@@ -38,7 +38,7 @@ class EntryId
     public function __construct($serverId, string $dn)
     {
         $this->serverId = (string)$serverId;
-        $this->dn= $dn;
+        $this->dn = $dn;
     }
 
     /**
@@ -96,8 +96,9 @@ class Entry implements Arrayable
      */
     private $entry;
 
-    public static function findByDn(LdapInterface $ldap, string $dn) : self
+    public static function findByDn(string $serverId, string $dn) : self
     {
+        $ldap = app('ldap.db.' . $serverId);
         // FIXME: filter? options? deletate?
         $result = $ldap->query($dn, 'objectclass=*', ['scope' => 'base']);
         return new Entry(1, $result->getEntries()[$dn]);

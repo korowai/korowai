@@ -37,12 +37,13 @@ class EntryController extends Controller
 //        );
 //    }
 
-    public function show(Request $request, int $server, string $dn)
+    public function show(Request $request, string $server, string $dn)
     {
-        $config = config('ldap.databases')[$server-1];
-        $ldap = \Korowai\Component\Ldap\Ldap::createWithConfig(['host' => $config['host']]);
-        $ldap->bind($config['binddn'], 'admin');
-        $entry = Entry::findByDn($ldap, $dn);
+        //$config = config('ldap.databases')[$server-1];
+        //$ldap = \Korowai\Component\Ldap\Ldap::createWithConfig(['host' => $config['host']]);
+        //$ldap->bind($config['binddn'], 'admin');
+        //$entry = Entry::findByDn($ldap, $dn);
+        $entry = Entry::findByDn($server, $dn);
         return $this->response->item(
             $entry,
             new EntryTransformer,
