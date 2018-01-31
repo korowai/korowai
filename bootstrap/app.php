@@ -95,6 +95,13 @@ $app->register(Korowai\Framework\Providers\LdapAdapterProvider::class);
 // Dingo Lumen service provider ...
 $app->register(Dingo\Api\Provider\LumenServiceProvider::class);
 
+// Custom exception handlers (Dingo)
+$app['Dingo\Api\Exception\Handler']->register(
+  function (\Korowai\Component\Ldap\Exception\LdapException $e) {
+    return \Korowai\Framework\Http\Api\Exceptions\Handler::handleLdapException($e);
+  }
+);
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

@@ -11,11 +11,10 @@ namespace Korowai\Framework\Http\Api\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Korowai\Framework\Http\Api\Middleware\Middleware;
 
-class LdapBind
+class LdapBind extends Middleware
 {
-    use \Dingo\Api\Routing\Helpers;
-
     /**
      * Handle an incoming request.
      *
@@ -45,13 +44,18 @@ class LdapBind
             }
 
             if(!$ldap->isBound()) {
-                if( ($b64h = $request->query('ldapBind')) ||
-                    ($b64h = $request->header('x-korowai-ldap-bind'))) {
-                    if(!isset($json = base64_decode($b64h, true))) {
-                        // FIXME: handle NULL $json (error)
+                if( null === ($json = $request->query('ldapBind')) ) {
+                    if( null !== ($b64h = $request->header('x-korowai-ldap-bind')) ) {
+                        if(null === ($json = base64_decode($b64h, true))) {
+                            // FIXME: handle NULL $json (error)
+                        }
                     }
-                    if(!isset($args = json_decode($json, true, 2))) {
+                }
+
+                if(isset($json)) {
+                    if(null === ($args = json_decode($json, true, 2))) {
                         // FIXME: handle NULL $args (error)
+                        $args = [];
                     }
                 } else {
                     $args = [];

@@ -29,7 +29,7 @@ class EntryController extends Controller
 
     public function show(Request $request, string $db, string $dn)
     {
-        $entry = Entry::findByDn($db, $dn);
+        $entry = Entry::findByDn(rawurldecode($db), rawurldecode($dn));
         return $this->response->item(
             $entry,
             new EntryTransformer,

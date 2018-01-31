@@ -58,7 +58,7 @@ class EntryId
      */
     public function __toString() : string
     {
-        return implode('/', $this->pieces());
+        return implode('/', array_map('rawurlencode', $this->pieces()));
     }
 
     /**

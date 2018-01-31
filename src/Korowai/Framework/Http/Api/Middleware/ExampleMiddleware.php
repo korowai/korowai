@@ -9,8 +9,9 @@
 namespace Korowai\Framework\Http\Api\Middleware;
 
 use Closure;
+use Korowai\Framework\Http\Api\Middleware\Middleware;
 
-class ExampleMiddleware
+class ExampleMiddleware extends Middleware
 {
     /**
      * Handle an incoming request.
