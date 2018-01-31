@@ -67,6 +67,10 @@ $app->singleton(
 //     'auth' => App\Http\Middleware\Authenticate::class,
 // ]);
 
+$app->routeMiddleware([
+  'ldap_bind' => Korowai\Framework\Http\Api\Middleware\LdapBind::class,
+]);
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers

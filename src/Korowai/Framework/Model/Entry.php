@@ -23,7 +23,7 @@ class EntryId
     /**
      * @var string
      */
-    private $serverId;
+    private $db;
     /**
      * @var string
      */
@@ -32,12 +32,12 @@ class EntryId
     /**
      * Initializes the EntryId object.
      *
-     * @param mixed $serverId Must be convertible to string
+     * @param mixed $db Must be convertible to string
      * @param string $dn
      */
-    public function __construct($serverId, string $dn)
+    public function __construct($db, string $dn)
     {
-        $this->serverId = (string)$serverId;
+        $this->db= (string)$db;
         $this->dn = $dn;
     }
 
@@ -48,7 +48,7 @@ class EntryId
      */
     public function pieces() : array
     {
-        return [$this->getServerId(), $this->getDn()];
+        return [$this->getDb(), $this->getDn()];
     }
 
     /**
@@ -66,9 +66,9 @@ class EntryId
      *
      * @return string
      */
-    public function getServerId() : string
+    public function getDb() : string
     {
-        return $this->serverId;
+        return $this->db;
     }
 
     /**
@@ -90,23 +90,24 @@ class Entry implements Arrayable
     /**
      * @var mixed
      */
-    private $serverId;
+    private $db;
     /**
      * @var \Korowai\Component\Ldap\Entry
      */
     private $entry;
 
-    public static function findByDn(string $serverId, string $dn) : self
+    public static function findByDn(string $db, string $dn) : self
     {
-        $ldap = app('ldap.db.' . $serverId);
-        // FIXME: filter? options? deletate?
+        $ldap = app('ldap.db.' . $db);
+        // FIXME: handle errors (inexistent $db)
+        // FIXME: filter? options? delegate?
         $result = $ldap->query($dn, 'objectclass=*', ['scope' => 'base']);
         return new Entry(1, $result->getEntries()[$dn]);
     }
 
-    public function __construct($serverId, LdapEntry $entry)
+    public function __construct($db, LdapEntry $entry)
     {
-        $this->serverId = (string)$serverId;
+        $this->db = (string)$db;
         $this->entry = $entry;
     }
 
@@ -191,7 +192,7 @@ class Entry implements Arrayable
      */
     public function getId() : EntryId
     {
-        return new EntryId($this->serverId, $this->entry->getDn());
+        return new EntryId($this->db, $this->entry->getDn());
     }
 
     /**
