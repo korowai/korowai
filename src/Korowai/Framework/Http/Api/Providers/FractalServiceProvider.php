@@ -45,21 +45,52 @@ class FractalServiceProvider extends ServiceProvider
             // FIXME: elaborate how to provide base URL to JsonApiSerializer
             // FIXME: seems like it's too early to use request, router, etc.
             //$serializer = new \League\Fractal\Serializer\JsonApiSerializer('');
-            $urlBase = '';
-            if((bool)($apiPrefix = config('api.prefix')) && ($apiPrefix != '/')) {
-                $urlBase = '/' . ltrim($apiPrefix, '/');
-            }
-            if((bool)($apiDomain = config('api.domain'))) {
-                // FIXME: HTTP vs. HTTPS?
-                $urlBase = 'http://' . $apiDomain . $urlBase;
-            }
-            $serializer = new JsonApiSerializer($urlBase);
+            $serializer = new JsonApiSerializer($this->getApiUrlBase());
 
             $fractal->setSerializer($serializer);
 
             return $fractal;
         });
 
+    }
+
+    protected function getApiUrlBase()
+    {
+        $urlBase = '';
+        if(($apiPrefix = config('api.prefix')) && ($apiPrefix != '/')) {
+            $urlBase = '/' . ltrim($apiPrefix, '/');
+        }
+        if(($apiDomain = $this->getApiDomain())) {
+            $scheme = $this->getApiScheme();
+            $urlBase = $scheme . '://' . $apiDomain . $urlBase;
+        }
+        return $urlBase;
+    }
+
+    protected function getApiDomain()
+    {
+        if(!($apiDomain = config('api.domain'))) {
+            if(($dd = config('api.default_domain'))) {
+                if(in_array($dd, ['{HTTP_HOST}', '{SERVER_NAME}', '{SERVER_ADDR}'])) {
+                    $apiDomain = $_SERVER[trim($dd,'{}')];
+                } else {
+                    $apiDomain = $dd;
+                }
+            }
+        }
+        return $apiDomain;
+    }
+
+    protected function getApiScheme()
+    {
+        if(!($scheme = config('api.scheme'))) {
+            if($_SERVER['HTTPS'] || $_SERVER['HTTPS'] === 'off') {
+                $scheme = 'https';
+            } elseif(!($scheme = $_SERVER['REQUEST_SCHEME'])) {
+                $scheme = 'http';
+            }
+        }
+        return $scheme;
     }
 
     protected function registerFractalTransformer()
