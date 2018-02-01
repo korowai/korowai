@@ -23,31 +23,3 @@ $api->version(['v1'], [
       'uses' => 'ExampleController@get'
     ]);
 });
-
-// Routes provided by korowai framework (they actually should be provided by
-// the framework).
-$api->version(['v1'], [
-    'namespace' => 'Korowai\Framework\Http\Api\Controllers'
-  ], function ($api) {
-    // -- databases
-    $api->group([], function($api) {
-      $api->get('databases', [
-        'as' => 'databases.index',
-        'uses' => 'DatabaseConfigController@index'
-      ]);
-      $api->get('databases/{id}', [
-        'as' => 'databases.show',
-        'uses' => 'DatabaseConfigController@show'
-      ]);
-    });
-    // --- databases
-
-    // --- ldap entries
-    $api->group([ 'middleware' => ['ldap_bind'] ], function ($api) {
-      $api->get('entry/{db}/{dn}', [
-        'as' => 'entry.show',
-        'uses' => 'EntryController@show'
-      ]);
-    });
-    // --- ldap entries
-});

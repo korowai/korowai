@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
-$app->withFacades();
+// $app->withFacades();
 
 // $app->withEloquent();
 
@@ -59,17 +59,7 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
-
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
-
-$app->routeMiddleware([
-  'ldap_bind' => Korowai\Framework\Http\Api\Middleware\LdapBind::class,
-]);
+// Custom middlewares go here
 
 /*
 |--------------------------------------------------------------------------
@@ -82,25 +72,8 @@ $app->routeMiddleware([
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
-
-$app->configure('ldap');
-
-// Korowai providers ...
-$app->register(Korowai\Framework\Http\Api\Providers\FractalServiceProvider::class);
-$app->register(Korowai\Framework\Providers\LdapAdapterProvider::class);
-
-// Dingo Lumen service provider ...
-$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
-
-// Custom exception handlers (Dingo)
-$app['Dingo\Api\Exception\Handler']->register(
-  function (\Korowai\Component\Ldap\Exception\LdapException $e) {
-    return \Korowai\Framework\Http\Api\Exceptions\Handler::handleLdapException($e);
-  }
-);
+// Korowai HTTP (JSON) API provider ...
+$app->register(Korowai\Framework\Http\Api\Providers\KorowaiServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

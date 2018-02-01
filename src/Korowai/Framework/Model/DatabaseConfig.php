@@ -10,47 +10,31 @@ declare(strict_types=1);
 
 namespace Korowai\Framework\Model;
 
-use Illuminate\Contracts\Support\Arrayable;
+//use Illuminate\Contracts\Support\Arrayable;
 
 /**
  * @todo Write documenation for DatabaseConfig
  */
-class DatabaseConfig implements Arrayable
+class DatabaseConfig
 {
-    const DEFAULT_CONFIG = 'ldap.databases';
-    const DEFAULT_OPTION_KEYS = array(
+    const PUBLIC_KEYS = array(
         'id',
         'name',
         'desc',
         'base',
-        'binddn',
-        'host',
-        'port',
-        'uri',
-        'encryption',
-        'options'
-    );
-    const UI_OPTION_KEYS = array(
-        'id',
-        'name',
-        'desc',
-        'binddn',
+        'server.host',
+        'server.port',
+        'server.uri'
     );
 
-    private $id;
-    private $name;
-    private $desc;
-    private $base;
-    private $binddn;
-    private $host;
-    private $port;
-    private $uri;
-    private $encryption;
-    private $options;
+    /**
+     * @var array
+     */
+    private $config;
 
     public static function all() : array
     {
-        $databases = config(static::DEFAULT_CONFIG);
+        $databases = config('ldap.databases');
         return array_map(function($db) {
             return new DatabaseConfig($db);
         }, $databases);
@@ -58,7 +42,7 @@ class DatabaseConfig implements Arrayable
 
     public static function findById($id) : array
     {
-        $databases = config(static::DEFAULT_CONFIG);
+        $databases = config('ldap.databases');
         $databases = array_filter($databases, function($db) use ($id) {
             return $db['id'] == $id;
         });
@@ -69,80 +53,103 @@ class DatabaseConfig implements Arrayable
 
     public function __construct(array $config)
     {
-        $array = $this->parseConfig($config);
-        array_walk($array, function($value, $key) { $this->$key = $value; });
+        $this->config = $config;
     }
 
-    public function parseConfig(array $config) : array
+    public function getConfig()
     {
-        $keys = array_filter(static::DEFAULT_OPTION_KEYS, function($key) use ($config) {
-            return array_key_exists($key, $config);
-        });
-        $values = array_map(function ($key) use ($config) {
-            return $config[$key];
-        }, $keys);
-        return array_combine($keys, $values);
+        return $this->config;
     }
 
-    public function toArray() : array
+    public function getPublicConfig()
     {
-        $keys = array_filter(static::DEFAULT_OPTION_KEYS, function($key) {
-            return isset($this->$key);
-        });
-        $values = array_map(function ($key) {
-            return $this->$key;
-        }, $keys);
-        return array_combine($keys, $values);
+        $config = array();
+        foreach(self::PUBLIC_KEYS as $path) {
+            if($this->hasConfigKey($path)) {
+                $value = $this->getConfigValue($path);
+                $this->writeToArray($config, $path, $value);
+            }
+        }
+        return $config;
+    }
+
+    public function hasConfigKey(string $path)
+    {
+        return $this->accessConfigEntry($path,
+            function($path) {
+                return false;
+            },  function($value, $path) {
+                return true;
+            }
+        );
+    }
+
+    public function getConfigValue(string $path)
+    {
+        return $this->accessConfigEntry($path,
+            function($path) {
+                return null;
+            },  function($value, $path) {
+                return $value;
+            }
+        );
+    }
+
+    protected function accessConfigEntry(string $path, callable $notFound, callable $found)
+    {
+        $stack = explode('.', $path);
+        $config = $this->config;
+        foreach($stack as $key) {
+            if(!array_key_exists($key, $config)) {
+                return call_user_func($notFound, $path);
+            }
+            $config = $config[$key];
+        }
+        return call_user_func($found, $config, $path);
+    }
+
+    protected function writeToArray(array &$array, string $path, $value)
+    {
+        $stack = explode('.', $path);
+        $last = array_pop($stack);
+        $current = &$array;
+        foreach($stack as $key) {
+            if(!isset($current[$key]) || !is_array($current[$key])) {
+                $current[$key] = array();
+            }
+            $current = &$current[$key];
+        }
+        $current[$last] = $value;
     }
 
     public function getId()
     {
-        return $this->id;
+        return $this->config['id'];
     }
 
     public function getName()
     {
-        return $this->name;
+        return $this->config['name'];
     }
 
     public function getDesc()
     {
-        return $this->desc;
+        return $this->config['desc'];
     }
 
     public function getBase()
     {
-        return $this->base;
+        return $this->config['base'];
     }
 
-    public function getBindDn()
+    public function getBind()
     {
-        return $this->binddn;
+        return $this->config['bind'];
     }
 
-    public function getHost()
+    public function getServerConfig($key = null)
     {
-        return $this->host;
-    }
-
-    public function getPort()
-    {
-        return $this->port;
-    }
-
-    public function getUri()
-    {
-        return $this->uri;
-    }
-
-    public function getEncryption()
-    {
-        return $this->encryption;
-    }
-
-    public function getOptions()
-    {
-        return $this->options;
+        return $key ? $this->config['server'][$key] : $this->config['server'];
     }
 }
 // vim: syntax=php sw=4 ts=4 et:

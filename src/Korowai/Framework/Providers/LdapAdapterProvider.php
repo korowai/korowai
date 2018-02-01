@@ -39,6 +39,8 @@ class LdapAdapterProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->registerConfig();
+
         $databases = config('ldap.databases');
         $keys = static::ldapInstanceNames($databases);
         $this->app->instance('ldap.databases', $keys);
@@ -62,6 +64,15 @@ class LdapAdapterProvider extends ServiceProvider
         $keys = static::ldapInstanceNames(config('ldap.databases'));
         array_unshift($keys, 'ldap.databases');
         return $keys;
+    }
+
+    /**
+     * Read Ldap configuration
+     */
+    protected function registerConfig()
+    {
+        $this->mergeConfigFrom(realpath(__DIR__.'/../config/ldap.php'), 'ldap');
+        $this->app->configure('ldap');
     }
 
     /**

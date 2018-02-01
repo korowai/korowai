@@ -21,7 +21,7 @@ use Korowai\Framework\Http\Api\Transformers\DatabaseConfigTransformer;
  */
 class DatabaseConfigController extends Controller
 {
-    const RESOURCE_KEY = 'databases';
+    const RESOURCE_KEY = 'database';
 
     public function __construct()
     {

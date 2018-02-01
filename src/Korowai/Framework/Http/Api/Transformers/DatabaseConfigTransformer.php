@@ -17,7 +17,7 @@ class DatabaseConfigTransformer extends TransformerAbstract
 {
     public function transform(DatabaseConfig $db)
     {
-        return $db->toArray();
+        return $db->getPublicConfig();
     }
 }
 // vim: syntax=php sw=4 ts=4 et:
