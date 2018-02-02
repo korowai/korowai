@@ -30,7 +30,7 @@ class LdapBind extends Middleware
     {
         if(is_string($dbId = $this->getRequestParam($request, 'db'))) {
 
-            $ldap = $this->getLdapDb($dbId);
+            $ldap = $this->ldap($dbId);
 
             if(!$ldap->isBound()) {
                 $args = $this->getBindArgs($request);
@@ -102,17 +102,12 @@ class LdapBind extends Middleware
      * @param string $dbId
      * @return \Korowai\Component\Ldap\LdapInterface
      */
-    protected function getLdapDb(string $dbId)
+    protected function ldap(string $dbId)
     {
-        try {
-            return ldap($dbId);
-        } catch (\ReflectionException $e) {
-            if($e->getMessage() == "Class ldap.db.$dbId does not exist") {
-                throw $this->response->errorNotFound("LDAP database '$dbId' not found");
-            } else {
-                throw $e;
-            }
+        if(null === ($ldap = ldap($dbId))) {
+            throw $this->response->errorNotFound("LDAP database '$dbId' not found");
         }
+        return $ldap;
     }
 }
 // vim: syntax=php sw=4 ts=4 et:

@@ -6,16 +6,19 @@
  * @license Distributed under MIT license.
  */
 
-//declare(strict_types=1);
+declare(strict_types=1);
+
+use Korowai\Framework\Ldap\LdapService;
 
 if (! function_exists('ldap') ) {
   /**
    * @param string $dbId
-   * @return \Korowai\Component\Ldap\LdapInterface
+   * @return \Korowai\Framework\Ldap\LdapService|\Korowai\Framework\Ldap\LdapInstance
    */
-  function ldap(string $dbId)
+  function ldap(string $dbId = null)
   {
-    return app('ldap.db.' . $dbId);
+      $service = app(LdapService::class);
+      return null === $dbId ? $service : $service->getInstance($dbId);
   }
 }
 

@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace Korowai\Framework\Model;
 
-//use Illuminate\Contracts\Support\Arrayable;
-
 /**
  * @todo Write documenation for Database
  */
@@ -32,23 +30,27 @@ class Database
      */
     private $config;
 
+    /**
+     * @return array[Database]|null
+     */
     public static function all() : array
     {
-        $databases = config('ldap.databases');
+        $config = ldap()->getConfig();
         return array_map(function($db) {
             return new Database($db);
-        }, $databases);
+        }, array_values($config));
     }
 
-    public static function findById($id) : array
+    /**
+     * @param string $id
+     * @return Database|null
+     */
+    public static function getById(string $id)
     {
-        $databases = config('ldap.databases');
-        $databases = array_filter($databases, function($db) use ($id) {
-            return $db['id'] == $id;
-        });
-        return array_map(function($db) {
-            return new Database($db);
-        }, $databases);
+        if(null === ($config = ldap()->getConfig($id))) {
+            return null;
+        }
+        return new Database($config);
     }
 
     public function __construct(array $config)
@@ -56,12 +58,12 @@ class Database
         $this->config = $config;
     }
 
-    public function getConfig()
+    public function getConfig() : array
     {
         return $this->config;
     }
 
-    public function getPublicConfig()
+    public function getPublicConfig() : array
     {
         $config = array();
         foreach(self::PUBLIC_KEYS as $path) {
@@ -73,7 +75,7 @@ class Database
         return $config;
     }
 
-    public function hasConfigKey(string $path)
+    public function hasConfigKey(string $path) : bool
     {
         return $this->accessConfigEntry($path,
             function($path) {

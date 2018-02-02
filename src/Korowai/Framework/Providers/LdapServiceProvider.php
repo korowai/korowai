@@ -12,6 +12,7 @@ namespace Korowai\Framework\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Korowai\Component\Ldap\Ldap;
+use Korowai\Framework\Ldap\LdapService;
 
 class LdapServiceProvider extends ServiceProvider
 {
@@ -40,18 +41,9 @@ class LdapServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerConfig();
-
-        $databases = config('ldap.databases');
-        $keys = static::ldapInstanceNames($databases);
-        $this->app->instance('ldap.databases', $keys);
-        foreach($databases as $db) {
-            $factory = $db['factory'] ?? null;
-            $this->app->singleton("ldap.db." . $db['id'],
-                function ($app) use ($db, $factory) {
-                    return Ldap::createWithConfig($db['server'], $factory);
-                }
-            );
-        }
+        $this->app->singleton(LdapService::class, function ($app) {
+            return new LdapService(config('ldap.databases'));
+        });
     }
 
     /**
@@ -61,9 +53,7 @@ class LdapServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        $keys = static::ldapInstanceNames(config('ldap.databases'));
-        array_unshift($keys, 'ldap.databases');
-        return $keys;
+        return [LdapService::class];
     }
 
     /**
@@ -73,19 +63,6 @@ class LdapServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(realpath(__DIR__.'/../config/ldap.php'), 'ldap');
         $this->app->configure('ldap');
-    }
-
-    /**
-     * Given an array of database configs returns an array of string keys used
-     * to identify corresponding Ldap instances in lumen application.
-     *
-     * @return array
-     */
-    static protected function ldapInstanceNames(array $databases) : array
-    {
-        return array_map(function ($db) {
-            return 'ldap.db.' . $db['id'];
-        }, $databases);
     }
 }
 

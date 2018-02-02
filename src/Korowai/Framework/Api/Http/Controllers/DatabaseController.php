@@ -37,16 +37,13 @@ class DatabaseController extends Controller
         );
     }
 
-    public function show(Request $request, int $id)
+    public function show(Request $request, string $id)
     {
-        $databases = Database::findById($id);
-        if(($n = count($databases)) < 1) {
-            return $this->response->errorNotFound();
-        } elseif ($n > 1) {
-            return $this->response->error("Ambiguous search result", 404);
+        if(null == ($database = Database::getById($id))) {
+            return $this->response->errorNotFound("LDAP database '$id' not found");
         }
         return $this->response->item(
-            $databases[0],
+            $database,
             new DatabaseTransformer,
             ['key' => static::RESOURCE_KEY]
         );

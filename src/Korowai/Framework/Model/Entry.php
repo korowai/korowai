@@ -37,7 +37,7 @@ class EntryId
      */
     public function __construct($db, string $dn)
     {
-        $this->db= (string)$db;
+        $this->db = (string)$db;
         $this->dn = $dn;
     }
 
@@ -98,7 +98,6 @@ class Entry implements Arrayable
 
     public static function findByDn(string $dbId, string $dn) : self
     {
-        //$ldap = ldap($dbId);
         $ldap = ldap($dbId);
         // FIXME: handle errors (inexistent $dbId)
         // FIXME: filter? options? delegate?
