@@ -73,7 +73,7 @@ $app->singleton(
 */
 
 // Korowai HTTP (JSON) API provider ...
-$app->register(Korowai\Framework\Http\Api\Providers\KorowaiServiceProvider::class);
+$app->register(Korowai\Framework\Api\Http\Providers\KorowaiServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

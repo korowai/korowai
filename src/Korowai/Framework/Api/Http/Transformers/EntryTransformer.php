@@ -8,16 +8,16 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Transformers;
+namespace Korowai\Framework\Api\Http\Transformers;
 
-use Korowai\Framework\Model\DatabaseConfig;
+use Korowai\Framework\Model\Entry;
 use League\Fractal\TransformerAbstract;
 
-class DatabaseConfigTransformer extends TransformerAbstract
+class EntryTransformer extends TransformerAbstract
 {
-    public function transform(DatabaseConfig $db)
+    public function transform(Entry $entry)
     {
-        return $db->getPublicConfig();
+        return $entry->toArray();
     }
 }
 // vim: syntax=php sw=4 ts=4 et:

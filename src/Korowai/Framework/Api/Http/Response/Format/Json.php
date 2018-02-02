@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Response\Format;
+namespace Korowai\Framework\Api\Http\Response\Format;
 
 use Dingo\Api\Http\Response\Format\Json as DingoJsonFormat;
 

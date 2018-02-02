@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Providers;
+namespace Korowai\Framework\Api\Http\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Korowai\Framework\Http\Api\Serializers\JsonApiSerializer;
+use Korowai\Framework\Api\Http\Serializers\JsonApiSerializer;
 
 class FractalServiceProvider extends ServiceProvider
 {
-    use \Korowai\Framework\Http\Api\Traits\ApiConfigTrait;
+    use \Korowai\Framework\Api\Http\Traits\ApiConfigTrait;
 
     /**
      * Bootstrap the application services.

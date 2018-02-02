@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Providers;
+namespace Korowai\Framework\Api\Http\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Korowai\Framework\Http\Api\Providers\FractalServiceProvider;
+use Korowai\Framework\Api\Http\Providers\FractalServiceProvider;
 use Korowai\Framework\Providers\LdapAdapterProvider;
-use Korowai\Framework\Http\Api\Serializers\JsonApiSerializer;
-use Korowai\Framework\Http\Api\Exceptions\Handler as KorowaiExceptionHandler;
-use Korowai\Framework\Http\Api\Middleware\LdapBind as LdapBindMiddleware;
+use Korowai\Framework\Api\Http\Serializers\JsonApiSerializer;
+use Korowai\Framework\Api\Http\Exceptions\Handler as KorowaiExceptionHandler;
+use Korowai\Framework\Api\Http\Middleware\LdapBind as LdapBindMiddleware;
 use Korowai\Component\Ldap\Exception\LdapException;
 use Dingo\Api\Provider\LumenServiceProvider as DingoServiceProvider;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
@@ -36,7 +36,7 @@ class ErrorSourcePointer
 
 class KorowaiServiceProvider extends ServiceProvider
 {
-    use \Korowai\Framework\Http\Api\Traits\ApiConfigTrait;
+    use \Korowai\Framework\Api\Http\Traits\ApiConfigTrait;
 
     /**
      * Bootstrap the application services.

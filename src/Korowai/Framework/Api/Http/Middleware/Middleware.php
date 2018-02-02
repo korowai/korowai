@@ -8,9 +8,11 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Serializers;
+namespace Korowai\Framework\Api\Http\Middleware;
 
-class JsonApiSerializer extends \League\Fractal\Serializer\JsonApiSerializer
+class Middleware
 {
+    use \Dingo\Api\Routing\Helpers;
 }
+
 // vim: syntax=php sw=4 ts=4 et:

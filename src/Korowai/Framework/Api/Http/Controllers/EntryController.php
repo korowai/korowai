@@ -8,13 +8,13 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Controllers;
+namespace Korowai\Framework\Api\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Korowai\Framework\Http\Api\Controllers\Controller;
+use Korowai\Framework\Api\Http\Controllers\Controller;
 use Korowai\Framework\Model\Entry;
-use Korowai\Framework\Http\Api\Transformers\EntryTransformer;
+use Korowai\Framework\Api\Http\Transformers\EntryTransformer;
 
 /**
  * @todo Write documentation for EntryController

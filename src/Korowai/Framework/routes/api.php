@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -17,17 +19,17 @@ $api = $app->make(Dingo\Api\Routing\Router::class);
 // Routes provided by korowai framework (they actually should be provided by
 // the framework).
 $api->version(['v1'], [
-    'namespace' => 'Korowai\Framework\Http\Api\Controllers'
+    'namespace' => 'Korowai\Framework\Api\Http\Controllers'
   ], function ($api) {
     // -- databases
     $api->group([], function($api) {
       $api->get('databases', [
-        'as' => 'databases.index',
-        'uses' => 'DatabaseConfigController@index'
+        'as' => 'database.index',
+        'uses' => 'DatabaseController@index'
       ]);
       $api->get('database/{id}', [
         'as' => 'database.show',
-        'uses' => 'DatabaseConfigController@show'
+        'uses' => 'DatabaseController@show'
       ]);
     });
     // --- databases

@@ -8,13 +8,13 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Middleware;
+namespace Korowai\Framework\Api\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
-use Korowai\Framework\Http\Api\Middleware\Middleware;
+use Korowai\Framework\Api\Http\Middleware\Middleware;
 
 class SetErrorReplacements extends Middleware
 {

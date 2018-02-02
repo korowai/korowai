@@ -13,9 +13,9 @@ namespace Korowai\Framework\Model;
 //use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * @todo Write documenation for DatabaseConfig
+ * @todo Write documenation for Database
  */
-class DatabaseConfig
+class Database
 {
     const PUBLIC_KEYS = array(
         'id',
@@ -36,7 +36,7 @@ class DatabaseConfig
     {
         $databases = config('ldap.databases');
         return array_map(function($db) {
-            return new DatabaseConfig($db);
+            return new Database($db);
         }, $databases);
     }
 
@@ -47,7 +47,7 @@ class DatabaseConfig
             return $db['id'] == $id;
         });
         return array_map(function($db) {
-            return new DatabaseConfig($db);
+            return new Database($db);
         }, $databases);
     }
 

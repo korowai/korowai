@@ -8,18 +8,18 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Controllers;
+namespace Korowai\Framework\Api\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Korowai\Framework\Http\Api\Controllers\Controller;
-use Korowai\Framework\Model\DatabaseConfig;
-use Korowai\Framework\Http\Api\Transformers\DatabaseConfigTransformer;
+use Korowai\Framework\Api\Http\Controllers\Controller;
+use Korowai\Framework\Model\Database;
+use Korowai\Framework\Api\Http\Transformers\DatabaseTransformer;
 
 /**
- * @todo Write documentation for DatabaseConfigController
+ * @todo Write documentation for DatabaseController
  */
-class DatabaseConfigController extends Controller
+class DatabaseController extends Controller
 {
     const RESOURCE_KEY = 'database';
 
@@ -29,17 +29,17 @@ class DatabaseConfigController extends Controller
 
     public function index(Request $request)
     {
-        $databases = DatabaseConfig::all();
+        $databases = Database::all();
         return $this->response->collection(
             new Collection($databases),
-            new DatabaseConfigTransformer,
+            new DatabaseTransformer,
             ['key' => static::RESOURCE_KEY]
         );
     }
 
     public function show(Request $request, int $id)
     {
-        $databases = DatabaseConfig::findById($id);
+        $databases = Database::findById($id);
         if(($n = count($databases)) < 1) {
             return $this->response->errorNotFound();
         } elseif ($n > 1) {
@@ -47,7 +47,7 @@ class DatabaseConfigController extends Controller
         }
         return $this->response->item(
             $databases[0],
-            new DatabaseConfigTransformer,
+            new DatabaseTransformer,
             ['key' => static::RESOURCE_KEY]
         );
     }

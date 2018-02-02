@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -105,7 +106,7 @@ return [
 
     'formats' => [
 
-        'json' => Korowai\Framework\Http\Api\Response\Format\Json::class,
+        'json' => Korowai\Framework\Api\Http\Response\Format\Json::class,
 
     ],
 
@@ -119,6 +120,6 @@ return [
     */
 
     'middleware' => [
-        Korowai\Framework\Http\Api\Middleware\SetErrorReplacements::class,
+        Korowai\Framework\Api\Http\Middleware\SetErrorReplacements::class,
     ],
 ];

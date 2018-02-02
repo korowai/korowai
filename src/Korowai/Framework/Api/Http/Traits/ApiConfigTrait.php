@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Korowai\Framework\Http\Api\Traits;
+namespace Korowai\Framework\Api\Http\Traits;
 
 trait ApiConfigTrait
 {

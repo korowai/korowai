@@ -6,16 +6,12 @@
  * @license Distributed under MIT license.
  */
 
-namespace Korowai\Framework\Http\Api\Exceptions;
+declare(strict_types=1);
+
+namespace Korowai\Framework\Api\Http\Exceptions;
 
 use Closure;
-//use Exception;
-//use Illuminate\Validation\ValidationException;
-//use Illuminate\Auth\Access\AuthorizationException;
-//use Illuminate\Database\Eloquent\ModelNotFoundException;
-//use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-//use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Korowai\Component\Ldap\Exception\LdapException;
 
@@ -76,7 +72,7 @@ class Handler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $e
-     * @return \Illuminate\Http\Response
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException;
      */
     public static function handleLdapException(LdapException $e)
     {
@@ -85,4 +81,5 @@ class Handler
         throw new HttpException($http, $e->getMessage(), $e, [], $code);
     }
 }
+
 // vim: syntax=php sw=4 ts=4 et:

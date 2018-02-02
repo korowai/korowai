@@ -6,10 +6,15 @@
  * @license Distributed under MIT license.
  */
 
-namespace Korowai\Framework\Http\Api\Middleware;
+declare(strict_types=1);
 
-class Middleware
+namespace Korowai\Framework\Api\Http\Controllers;
+
+use Laravel\Lumen\Routing\Controller as BaseController;
+
+class Controller extends BaseController
 {
     use \Dingo\Api\Routing\Helpers;
 }
+
 // vim: syntax=php sw=4 ts=4 et:
