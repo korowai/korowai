@@ -12,7 +12,7 @@ namespace Korowai\Framework\Api\Http\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Korowai\Framework\Api\Http\Providers\FractalServiceProvider;
-use Korowai\Framework\Providers\LdapAdapterProvider;
+use Korowai\Framework\Providers\LdapServiceProvider;
 use Korowai\Framework\Api\Http\Serializers\JsonApiSerializer;
 use Korowai\Framework\Api\Http\Exceptions\Handler as KorowaiExceptionHandler;
 use Korowai\Framework\Api\Http\Middleware\LdapBind as LdapBindMiddleware;
@@ -67,7 +67,7 @@ class KorowaiServiceProvider extends ServiceProvider
     protected function registerRequiredProviders()
     {
         $this->app->register(FractalServiceProvider::class);
-        $this->app->register(LdapAdapterProvider::class);
+        $this->app->register(LdapServiceProvider::class);
         $this->app->register(DingoServiceProvider::class);
     }
 

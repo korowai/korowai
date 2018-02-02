@@ -90,24 +90,25 @@ class Entry implements Arrayable
     /**
      * @var mixed
      */
-    private $db;
+    private $dbId;
     /**
      * @var \Korowai\Component\Ldap\Entry
      */
     private $entry;
 
-    public static function findByDn(string $db, string $dn) : self
+    public static function findByDn(string $dbId, string $dn) : self
     {
-        $ldap = app('ldap.db.' . $db);
-        // FIXME: handle errors (inexistent $db)
+        //$ldap = ldap($dbId);
+        $ldap = ldap($dbId);
+        // FIXME: handle errors (inexistent $dbId)
         // FIXME: filter? options? delegate?
         $result = $ldap->query($dn, 'objectclass=*', ['scope' => 'base']);
-        return new Entry(1, $result->getEntries()[$dn]);
+        return new Entry($dbId, $result->getEntries()[$dn]);
     }
 
-    public function __construct($db, LdapEntry $entry)
+    public function __construct($dbId, LdapEntry $entry)
     {
-        $this->db = (string)$db;
+        $this->dbId = (string)$dbId;
         $this->entry = $entry;
     }
 
@@ -192,7 +193,7 @@ class Entry implements Arrayable
      */
     public function getId() : EntryId
     {
-        return new EntryId($this->db, $this->entry->getDn());
+        return new EntryId($this->dbId, $this->entry->getDn());
     }
 
     /**

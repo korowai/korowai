@@ -13,7 +13,7 @@ namespace Korowai\Framework\Providers;
 use Illuminate\Support\ServiceProvider;
 use Korowai\Component\Ldap\Ldap;
 
-class LdapAdapterProvider extends ServiceProvider
+class LdapServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.

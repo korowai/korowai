@@ -105,7 +105,7 @@ class LdapBind extends Middleware
     protected function getLdapDb(string $dbId)
     {
         try {
-            return app('ldap.db.' . $dbId);
+            return ldap($dbId);
         } catch (\ReflectionException $e) {
             if($e->getMessage() == "Class ldap.db.$dbId does not exist") {
                 throw $this->response->errorNotFound("LDAP database '$dbId' not found");
