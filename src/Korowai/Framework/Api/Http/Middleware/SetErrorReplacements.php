@@ -28,9 +28,11 @@ class SetErrorReplacements extends Middleware
     public function handle(Request $request, Closure $next)
     {
         app(DingoExceptionHandler::class)->setReplacements([
-            ':request_path' => $request->path(),
-            ':request_query' => (config('api.debug') ? $request->query() : null),
-            ':request_headers' => (config('api.debug') ? $request->header() : null),
+            ':pointer' => $request->path(),
+            ':request' => config('api.debug') ? [
+                'query' => $request->query(),
+                'headers' => $request->header()
+            ] : null,
         ]);
         return $next($request);
     }

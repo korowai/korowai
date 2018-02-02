@@ -110,12 +110,11 @@ class KorowaiServiceProvider extends ServiceProvider
                 'code'      => ':code',
                 'status'    => ':status_code',
                 'source'    => [
-                    'pointer' => ':request_path',
+                    'pointer' => ':pointer',
                 ],
                 'meta' => [
                     'errors' => ':errors',
-                    'request_query'  => ':request_query',
-                    'request_headers' => ':request_headers',
+                    'request' => ':request',
                     'debug'  => ':debug',
                 ]
             ] ]

@@ -13,6 +13,7 @@ namespace Korowai\Framework\Api\Http\Middleware;
 class Middleware
 {
     use \Dingo\Api\Routing\Helpers;
+    use \Korowai\Framework\Api\Http\Traits\RequestHelpersTrait;
 }
 
 // vim: syntax=php sw=4 ts=4 et:
