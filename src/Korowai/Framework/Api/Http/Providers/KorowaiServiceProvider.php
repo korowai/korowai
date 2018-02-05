@@ -20,19 +20,6 @@ use Korowai\Component\Ldap\Exception\LdapException;
 use Dingo\Api\Provider\LumenServiceProvider as DingoServiceProvider;
 use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 
-class ErrorSourcePointer
-{
-    private $app;
-    public function __construct($app)
-    {
-        $this->app = $app;
-    }
-    public function __toString()
-    {
-        return 'pointer!!';
-        //return $this->app->request->path();
-    }
-}
 
 class KorowaiServiceProvider extends ServiceProvider
 {
@@ -60,10 +47,12 @@ class KorowaiServiceProvider extends ServiceProvider
         $this->app->configure('api');
         $this->registerMiddleware();
         $this->registerRoutes();
-        $this->registerExceptionHandlers();
-        $this->setErrorFormat();
+        $this->registerExceptionHandler();
     }
 
+    /**
+     * Register other providers required by this one.
+     */
     protected function registerRequiredProviders()
     {
         $this->app->register(FractalServiceProvider::class);
@@ -71,54 +60,44 @@ class KorowaiServiceProvider extends ServiceProvider
         $this->app->register(DingoServiceProvider::class);
     }
 
+    /**
+     * Read our part of 'api' config
+     */
     protected function registerConfig()
     {
         $this->mergeConfigFrom(realpath(__DIR__.'/../../../config/api.php'), 'api');
         if(!$this->app->runningInConsole()) {
-            // Internally this validates configuration
+            // Internally this validates configuration and throws an exception
+            // if something gets wrong...
             $this->apiConfigDetermineUrlBase();
         }
     }
 
+    /**
+     * Register korowai middlewares.
+     */
     protected function registerMiddleware()
     {
         $this->app->routeMiddleware([ 'ldapBind' => LdapBindMiddleware::class ]);
     }
 
+    /**
+     * Read routes.
+     */
     protected function registerRoutes()
     {
         $app = $this->app;
         require __DIR__.'/../../../routes/api.php';
     }
 
-    protected function registerExceptionHandlers()
+    /**
+     * Register korowai exception handler.
+     */
+    protected function registerExceptionHandler()
     {
-        $dingoHandler = $this->app[DingoExceptionHandler::class];
-        $dingoHandler->register(
-          function (LdapException $e) {
-            return KorowaiExceptionHandler::handleLdapException($e);
-          }
-        );
-    }
-
-    protected function setErrorFormat()
-    {
-        $dingoHandler = $this->app[DingoExceptionHandler::class];
-        $dingoHandler->setErrorFormat([
-            'errors' => [ [
-                'detail'    => ':message',
-                'code'      => ':code',
-                'status'    => ':status_code',
-                'source'    => [
-                    'pointer' => ':pointer',
-                ],
-                'meta' => [
-                    'errors' => ':errors',
-                    'request' => ':request',
-                    'debug'  => ':debug',
-                ]
-            ] ]
-        ]);
+        $dingoHandler = $this->app->make(DingoExceptionHandler::class);
+        $korowaiHandler = new KorowaiExceptionHandler($dingoHandler);
+        $this->app->instance(KorowaiExceptionHandler::class, $korowaiHandler);
     }
 }
 

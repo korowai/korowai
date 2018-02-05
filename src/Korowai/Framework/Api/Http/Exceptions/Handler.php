@@ -14,9 +14,16 @@ use Closure;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Response;
 use Korowai\Component\Ldap\Exception\LdapException;
+use Dingo\Api\Exception\Handler as DingoExceptionHandler;
 
+/**
+ * Exception handler.
+ */
 class Handler
 {
+    /**
+     * HTTP status codes for particular LDAP exceptions.
+     */
     protected static  $ldapHttpCodes = [
         0 => 200,  // success
         1 => 500,  // operationsError
@@ -68,17 +75,67 @@ class Handler
     ];
 
     /**
-     * Render an exception into an HTTP response.
+     * @var \Dingo\Api\Exception\Handler
+     */
+    protected $handler;
+
+    /**
+     * Initializes the Handler.
+     *
+     * @param \Dingo\Api\Exception\Handler $handler
+     */
+    public function __construct(DingoExceptionHandler $handler)
+    {
+        $this->handler = $handler;
+        $this->registerKorowaiHandlers();
+        $this->setKorowaiErrorFormat();
+    }
+
+    /**
+     * Register custom exception handlers in the Dingo exception handler
+     */
+    protected function registerKorowaiHandlers()
+    {
+        $this->handler->register(function (LdapException $e) {
+            return $this->handleLdapException($e);
+        });
+    }
+
+    /**
+     * Setup the Dingo exception handler to use our custom error format.
+     */
+    protected function setKorowaiErrorFormat()
+    {
+        $this->handler->setErrorFormat([
+            'errors' => [ [
+                'detail'    => ':message',
+                'code'      => ':code',
+                'status'    => ':status_code',
+                'source'    => [
+                    'pointer' => ':pointer',
+                ],
+                'meta' => [
+                    'errors' => ':errors',
+                    'request' => ':request',
+                    'debug'  => ':debug',
+                ]
+            ] ]
+        ]);
+    }
+
+    /**
+     * Render an LdapException into an HTTP response.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $e
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException;
      */
-    public static function handleLdapException(LdapException $e)
+    protected function handleLdapException(LdapException $e)
     {
         $code = $e->getCode();
         $http = static::$ldapHttpCodes[$code] ?? 500;
-        throw new HttpException($http, $e->getMessage(), $e, [], $code);
+        $exception = new HttpException($http, $e->getMessage(), $e, [], $code);
+        return $this->handler->handle($exception);
     }
 }
 
